@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!DOCTYPE html><html><head>
 <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
 <title>无影坦克2代</title>
 </head>
-<body>
+<body style="background-color: rgb(242, 242, 242);">
 <style>
 img{
 max-width:100%
@@ -22,54 +20,53 @@ color:#1080a0
 <div style="padding:0 16px">
 <h1>无影坦克𝐈𝐈</h1>
 <h3>由ybzjdsd(哆啦可尼夫)制作</h3>
-<details>
+<details open="true">
 <summary>制作坦克</summary>
-<span>选择表图</span><br /><input type="file" id="ipt1" onchange="ipt1()" accept="image/*" ></input>
-<br />
-<span>选择里图</span><br /><input type="file" id="ipt"  onchange="ipt()"  accept="image/*" ></input>
-<br />
-<span>添加备注</span><input id="beizhucheckbox" type="checkbox" checked="true"></input>
-<br /><input type="text" id="beizhu" style="width:150px" value="TK"></input>
-<br />
-<span>表图压缩度&emsp;</span><select id="select" onchange="select()">
+<span>选择表图</span><br><input type="file" id="ipt1" onchange="ipt1()" accept="image/*">
+<br>
+<span>选择里图</span><br>
+<div  style="display: grid;grid-gap: 10px;">
+<input type="file" id="ipt" onchange="ipt()" accept="image/*">
+</div>
+<br>
+<span>添加备注</span><input id="beizhucheckbox" type="checkbox">
+<br><input type="text" id="beizhu" style="width: 150px; background-color: rgb(242, 242, 242);">
+<br>
+<span>表图压缩度 </span><select id="select" onchange="select()" style="background-color: rgb(242, 242, 242);">
 <option value="1">1</option>
 <option value="2">2</option>
 <option value="3">3</option>
 <option value="4" selected="true">4</option>
 </select>
-<br />
+<br>
 <span id="info1">建议里图大小：小于2M</span>
-<br />
+<br>
 <button onclick="a1()">合成图片</button>
-<br />
-<img id="img1"></img>
-<br />
+<br>
+<div id="gallery" style="display:grid;grid-gap:10px;grid-template-columns:repeat(5,1fr);">
+
 <a href="" id="a1" style="display:none">保存图片</a>
+</div>
 </details>
 
-<details>
+<details open="true">
 <summary>坦克现形</summary>
-<input type="file" id="ipt2" onchange="ipt2()" accept="image/*" ></input>
-<div id="info2a" style="display:none">
-<span id="info2"></span><span>&emsp;</span><a href="" id="a2">保存图片</a>
-</div>
-<img src="" id="img2"></img>
+<input type="file" id="ipt2" onchange="ipt2()" accept="image/*">
+<div id="container"/>
 </details>
 
 <details open="true">
 <summary>使用须知</summary>
 <div>
-<span style="color:#ee6622"><span style="font-weight:bold">免责声明</span>&emsp;本页面仅供技术研究使用，使用者做出的行为及后果作者概不负责！</span><br />
-<br />说明<br />
-表图压缩度越高，合成的图片体积越小，但噪点越多<br />
-百度贴吧会自动压缩大图，所以里图大小建议不要过大。百度贴吧ios端似乎对所有图片都压缩，导致ios发不成功<br />
-发送时不要加水印，合成时需保存原图，解密时务必上传原图<br />
-建议不要在百度浏览器或贴吧自带浏览器内使用此程序<br />
-部分手机浏览器使用时可能会因为兼容性问题导致无法保存图片，建议换谷歌浏览器或者使用电脑<br />
-本站网址与备用网址:<br />
-<a href="https://ybzjdsd.gitee.io/wytk2">ybzjdsd.gitee.io/wytk2</a><br />
-<a href="https://wytk.github.io">wytk.github.io</a><span>←github流量比较多，建议用这个</span><br />
-下载此网页，为我省点流量：<a id="bc" download="wytk.html">下载</a><br />
+表图压缩度越高，合成的图片体积越小，但噪点越多<br>
+百度贴吧会自动压缩大图，所以里图大小建议不要过大<br>
+发送时不要加水印，合成时需保存原图，解密时务必上传原图<br>
+建议不要在百度浏览器或贴吧自带浏览器内使用此程序<br>
+部分手机浏览器使用时可能会因为兼容性问题导致无法保存图片，建议换谷歌浏览器或者使用电脑<br>
+本站网址与备用网址:<br>
+<a href="https://ybzjdsd.gitee.io/wytk2">ybzjdsd.gitee.io/wytk2</a><br>
+<a href="https://wytk.github.io">wytk.github.io</a><span>←github流量比较多，建议用这个</span><br>
+下载此网页，为我省点流量：<a id="bc" download="wytk.html">下载</a><br>
 下载之后是个html文件，(大概)可以用浏览器直接打开使用
 </div>
 </details>
@@ -120,24 +117,80 @@ return outputStr;
 }
 </script>
 <script>
+let IMG0=new Image();
 let IMG1=new Image();
 let IMGINFO=[];
+let IMGSRC = new Array();
 let IMG2=new Image();
 let MODE=4;
 let SRC1="";
 let SRC2="";
+var count = 0 ;
+var cursor = 0 ;
+
+function spawn(f){
+	//let f=gen(MODE);
+	//if(SRC1){URL.revokeObjectURL(SRC1)}
+	SRC1=URL.createObjectURL(f);
+	
+	var gallery = document.getElementById("gallery");
+
+	var img_ = document.createElement("img");
+	img_.src=SRC1;
+	img_.setAttribute("position","relative");
+	img_.setAttribute("height","256px");
+	
+	gallery.appendChild(img_);
+	
+}
 function a1(){
 requestAnimationFrame(function(){
 requestAnimationFrame(function(){
 try{
-let f=gen(MODE);
-if(SRC1){URL.revokeObjectURL(SRC1)}
-SRC1=URL.createObjectURL(f);
-document.getElementById("a1").href=SRC1;
-document.getElementById("img1").src=SRC1;
-document.getElementById("a1").style.display="inline";
-document.getElementById("a1").download="download.png"
-}catch(e){alert("图片生成失败")}
+/*****/
+
+if(count == 1){
+	IMG1=IMG0;
+	let ofile=gen(MODE);
+	spawn(ofile);
+	return ;
+}
+
+	if(cursor < count - 1){
+		IMG1 = IMGSRC.shift();
+		console.log("F");
+	}else{
+		IMG1 = IMG0 ;
+	}
+	
+	let ofile=gen(MODE);
+	spawn(ofile);
+		
+	if(cursor < count - 1){
+		var oFReader = new FileReader();
+		oFReader.readAsArrayBuffer(ofile);
+		oFReader.onloadend = function(oFRevent){
+		var osrc = oFRevent.target.result;
+			let l=new Uint8Array(osrc);
+			IMGINFO=[ [l.length,utf8Encode(ofile.name),ofile.type],l];
+			console.log("reload");
+			cursor ++ ;
+			a1();
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+
+	
+}catch(e){
+console.log(e);
+alert("图片生成失败");
+}
 })
 })
 }
@@ -146,12 +199,21 @@ try{
 let f=sol();
 if(SRC2){URL.revokeObjectURL(SRC2)}
 SRC2=URL.createObjectURL(f[0]);
-document.getElementById("a2").href=SRC2;
-document.getElementById("img2").src=SRC2;
-document.getElementById("info2a").style.display="block";
-document.getElementById("a2").download=f[1];
-document.getElementById("info2").innerHTML=f[1]
-}catch(e){alert("图片读取失败")}
+
+var container = document.getElementById("container");  //使用容器，并填充图片
+var img2_ = document.createElement("img");
+img2_.src=SRC2;
+container.appendChild(img2_);
+
+IMG2.src=SRC2;
+IMG2.onload=function(){
+console.log("IMG2.onload");
+a2()
+}
+
+}catch(e){
+alert("读取完成");
+}
 }
 function select(){
 let l=[0,"500K","1M","1.5M","2M"]
@@ -164,20 +226,48 @@ var ofile = document.getElementById("ipt1").files[0];
 oFReader.readAsDataURL(ofile);
 oFReader.onloadend = function(oFRevent){
 var osrc = oFRevent.target.result;
-IMG1.src=osrc;
-
+IMG0.src=osrc;
 }
 }
 
 function ipt(){
 var oFReader = new FileReader();
-var ofile = document.getElementById("ipt").files[0];
+var ipt_ = event.srcElement;
+var ofile = ipt_.files[0];
+if(count == 0){
 oFReader.readAsArrayBuffer(ofile);
+}else{
+oFReader.readAsDataURL(ofile);
+}
 oFReader.onloadend = function(oFRevent){
 try{
-let l=new Uint8Array(oFRevent.target.result);
-IMGINFO=[ [l.length,utf8Encode(ofile.name),ofile.type],l];
-}catch(e){}
+var osrc = oFRevent.target.result ;
+
+if(count == 0){
+	let l=new Uint8Array(osrc);
+	IMGINFO=[ [l.length,utf8Encode(ofile.name),ofile.type],l];
+	console.log("里图");
+}else {
+	let IMG_ = new Image();
+	IMG_.src = osrc ;
+	IMGSRC.push(IMG_);
+	console.log("表图");
+	//IMG1 = IMG_;
+}
+
+count ++ ;
+
+var newOfile = document.createElement("input");
+
+newOfile.id = "ipt"+count ;
+newOfile.type = "file" ;
+newOfile.onchange = ipt ;
+newOfile.onchange = ipt ;
+newOfile.accept = "image/*" ; 
+ipt_.parentNode.appendChild(newOfile);
+}catch(e){
+console.log(e);
+}
 }
 }
 
@@ -193,7 +283,6 @@ a2()
 }
 }
 }
-
 
 function dataURLtoBlob(dataurl) {
 var arr = dataurl.split(',');
@@ -233,7 +322,7 @@ cvd.fillStyle="#000000";
 cvd.fillText(w,4,14,wid-8);
 }
   
-return new File([dataURLtoBlob(en(mode,modelist,cvd.getImageData(0,0,wid,hit),word,IMGINFO[1]," ybzjdsd.gitee.io/wytk2"))],"download.png",{type:"image/png"})
+return new File([dataURLtoBlob(en(mode,modelist,cvd.getImageData(0,0,wid,hit),word,IMGINFO[1]," ybzjdsd.gitee.io/wytk2"))],IMGINFO[0][1],{type:"image/png"})
 }
 function sol(){
 let cv=document.createElement("canvas");
@@ -377,5 +466,5 @@ let w="<!DOCTYPE html>"+document.documentElement.outerHTML;
 document.getElementById("bc").href=URL.createObjectURL(new Blob([w],{type:"text/html"}))
 }
 </script>
-</body>
-</html>
+
+</body></html>
